@@ -5,31 +5,27 @@ namespace GeekShopping.ProductAPI.Models
 {
     public class Product : BaseEntity
     {
-        public Product(string name, decimal price, string? description = null, string? categoryName = null, string? imageUrl = null)
+        public Product()
         {
-            Name = name;
-            Price = price;
-            Description = description;
-            CategoryName = categoryName;
-            ImageUrl = imageUrl;
+
         }
 
         [Required]
         [StringLength(50)]
-        public string Name { get; private set; }
+        public string Name { get; set; }
 
         [Required]
         [Range(0.1,double.MaxValue)]
-        public decimal Price { get; private set; }
+        public decimal Price { get; set; }
 
         [StringLength(300)]
-        public string? Description { get; private set; }
+        public string? Description { get; set; }
 
         [StringLength(50)]
-        public string? CategoryName { get; private set; }
+        public string? CategoryName { get; set; }
 
         [StringLength(300)]
-        public string? ImageUrl { get; private set; }
+        public string? ImageUrl { get; set; }
 
         public void ChangeName(string newName) => Name = newName;
         public void ChangeDescription(string newDescription) => Description = newDescription;
