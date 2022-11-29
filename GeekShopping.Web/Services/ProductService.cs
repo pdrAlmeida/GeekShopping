@@ -2,6 +2,7 @@
 using GeekShopping.Web.Services.Interfaces;
 using GeekShopping.Web.Utils;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http.Headers;
 
 namespace GeekShopping.Web.Services
 {
@@ -15,34 +16,39 @@ namespace GeekShopping.Web.Services
             _client = client ?? throw new ArgumentNullException(nameof(client));
         }
 
-        public async Task<IEnumerable<ProductModel>> FindAllProducts()
+        public async Task<IEnumerable<ProductModel>> FindAllProducts(string token)
         {
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _client.GetAsync(BasePath);
             return await response.ReadContentAs<List<ProductModel>>();
         }
 
-        public async Task<ProductModel> FindProductById(Guid id)
+        public async Task<ProductModel> FindProductById(Guid id, string token)
         {
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _client.GetAsync($"{BasePath}/{id}");
             return await response.ReadContentAs<ProductModel>();
         }
-        public async Task<ProductModel> CreateProduct([FromBody] ProductModel model)
+        public async Task<ProductModel> CreateProduct([FromBody] ProductModel model, string token)
         {
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _client.PostAsJson(BasePath, model);
             if(response.IsSuccessStatusCode)
                 return await response.ReadContentAs<ProductModel>();
             throw new Exception("Algo deu errado na chamada da API");
         }
 
-        public async Task<ProductModel> UpdateProduct([FromBody] ProductModel model)
+        public async Task<ProductModel> UpdateProduct([FromBody] ProductModel model, string token)
         {
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _client.PutAsJson(BasePath, model);
             if (response.IsSuccessStatusCode)
                 return await response.ReadContentAs<ProductModel>();
             throw new Exception("Algo deu errado na chamada da API");
         }
-        public async Task<bool> DeleteProductById(Guid id)
+        public async Task<bool> DeleteProductById(Guid id, string token)
         {
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await _client.DeleteAsync($"{BasePath}/{id}");
             if (response.IsSuccessStatusCode)
                 return await response.ReadContentAs<bool>();
